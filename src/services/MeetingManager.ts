@@ -8,6 +8,7 @@ import { EventEmitter } from 'events';
 import { DeepgramService } from './DeepgramService';
 import { ClaudeService } from './ClaudeService';
 import { SupabaseService, type MeetingSessionData } from './SupabaseService';
+import { SalesforceService, type MeetingToCRMPayload } from './SalesforceService';
 import type {
   MeetingConfig,
   MeetingStatus,
@@ -17,8 +18,7 @@ import type {
   BuyingSignal,
   ActionItem,
   NextStep,
-  ConversationScore,
-  EmailContent
+  ConversationScore
 } from '../types';
 
 // ============================================================================
@@ -188,6 +188,19 @@ interface MeetingManagerConfig {
     url: string;
     anonKey: string;
   };
+  salesforce?: {
+    zapierWebhookUrl: string;
+    zapierApiKey?: string;
+    syncInterval?: number;
+    enableRealTimeSync?: boolean;
+    customWebhooks?: {
+      onContactCreate?: string;
+      onOpportunityUpdate?: string;
+      onTaskComplete?: string;
+      onLeadConvert?: string;
+      onActivityLog?: string;
+    };
+  };
   audio: {
     preferredDeviceId?: string;
     noiseSuppression: boolean;
@@ -230,6 +243,7 @@ export class MeetingManager extends EventEmitter {
   private deepgram: DeepgramService | null = null;
   private claude: ClaudeService | null = null;
   private supabase: SupabaseService | null = null;
+  private salesforce: SalesforceService | null = null;
 
   // Configuration
   private config: MeetingManagerConfig;
@@ -302,11 +316,18 @@ export class MeetingManager extends EventEmitter {
       this.emit('initialization:started');
 
       // Initialize services in parallel
-      await Promise.all([
+      const initPromises = [
         this.initializeDeepgram(),
         this.initializeClaude(),
         this.initializeSupabase()
-      ]);
+      ];
+
+      // Add Salesforce initialization if configured
+      if (this.config.salesforce && this.config.features.crmSync) {
+        initPromises.push(this.initializeSalesforce());
+      }
+
+      await Promise.all(initPromises);
 
       // Setup service coordination
       this.setupServiceCoordination();
@@ -435,6 +456,11 @@ export class MeetingManager extends EventEmitter {
       
       // Save final meeting data
       await this.saveFinalMeetingData(meetingId, summary);
+
+      // Sync to CRM if enabled
+      if (this.config.features.crmSync && this.salesforce) {
+        await this.syncMeetingToCRM(meetingId, summary);
+      }
 
       // Cleanup resources
       this.cleanupMeetingResources(meetingId);
@@ -625,7 +651,7 @@ export class MeetingManager extends EventEmitter {
         processingTime: Date.now() - startTime,
         qualityScore: 0,
         status: 'failed',
-        errors: [error.message]
+        errors: [error instanceof Error ? error.message : 'Unknown error']
       };
     }
   }
@@ -691,7 +717,8 @@ export class MeetingManager extends EventEmitter {
         url: this.config.supabase.url,
         anonKey: this.config.supabase.anonKey,
         autoRefreshToken: true,
-        persistSession: true
+        persistSession: true,
+        detectSessionInUrl: false
       });
       await this.supabase.initialize();
 
@@ -702,6 +729,47 @@ export class MeetingManager extends EventEmitter {
 
     } catch (error) {
       this.serviceHealth.supabase.status = 'failed';
+      throw error;
+    }
+  }
+
+  /**
+   * Initialize Salesforce CRM service via Zapier
+   */
+  private async initializeSalesforce(): Promise<void> {
+    if (!this.config.salesforce) {
+      throw new Error('Salesforce configuration is required');
+    }
+
+    try {
+      this.salesforce = new SalesforceService({
+        zapierWebhookUrl: this.config.salesforce.zapierWebhookUrl,
+        zapierApiKey: this.config.salesforce.zapierApiKey,
+        syncInterval: this.config.salesforce.syncInterval || 0,
+        enableRealTimeSync: this.config.salesforce.enableRealTimeSync,
+        customWebhooks: this.config.salesforce.customWebhooks
+      });
+      
+      await this.salesforce.initialize();
+
+      // Setup event handlers
+      this.salesforce.on('contact.created', (data) => {
+        this.emit('crm:contact.created', data);
+      });
+
+      this.salesforce.on('opportunity.updated', (data) => {
+        this.emit('crm:opportunity.updated', data);
+      });
+
+      this.salesforce.on('webhook.error', (error) => {
+        console.error('[CRM] Webhook error:', error);
+        this.emit('crm:error', error);
+      });
+
+      console.log('✅ Salesforce CRM service initialized');
+
+    } catch (error) {
+      console.error('Failed to initialize Salesforce service:', error);
       throw error;
     }
   }
@@ -961,7 +1029,7 @@ export class MeetingManager extends EventEmitter {
   /**
    * Test audio device quality
    */
-  private async testAudioDevice(deviceId: string): Promise<AudioQualityMetrics> {
+  private async testAudioDevice(_deviceId: string): Promise<AudioQualityMetrics> {
     // Simulate audio quality testing
     // In reality, this would analyze actual audio input
     return {
@@ -1011,7 +1079,7 @@ export class MeetingManager extends EventEmitter {
   /**
    * Setup audio processing pipeline
    */
-  private setupAudioProcessing(meetingId: string): void {
+  private setupAudioProcessing(_meetingId: string): void {
     if (!this.audioContext || !this.mediaStream) return;
 
     const source = this.audioContext.createMediaStreamSource(this.mediaStream);
@@ -1023,7 +1091,7 @@ export class MeetingManager extends EventEmitter {
       
       // Send to Deepgram
       if (this.deepgram) {
-        this.deepgram.processAudio(audioData.buffer);
+        this.deepgram.processAudio(audioData.buffer as ArrayBuffer);
       }
 
       // Monitor audio quality
@@ -1350,6 +1418,47 @@ export class MeetingManager extends EventEmitter {
   }
 
   /**
+   * Start real-time processing for a meeting
+   */
+  private startRealTimeProcessing(meetingId: string): void {
+    const meetingState = this.activeMeetings.get(meetingId);
+    if (!meetingState) return;
+
+    // Initialize real-time processing
+    meetingState.isProcessing = true;
+    
+    // Start background processing
+    this.startBackgroundProcessing();
+    
+    console.log(`🔄 Started real-time processing for meeting ${meetingId}`);
+  }
+
+  /**
+   * Handle insight generated from Claude service
+   */
+  private handleInsightGenerated(data: any): void {
+    try {
+      // Process the generated insight
+      if (data.meetingId && data.insight) {
+        const meetingState = this.activeMeetings.get(data.meetingId);
+        if (meetingState) {
+          meetingState.insights.push(data.insight);
+          
+          // Emit insight to listeners
+          this.emit('insight:generated', {
+            meetingId: data.meetingId,
+            insight: data.insight
+          });
+          
+          console.log(`💡 Insight generated for meeting ${data.meetingId}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error handling generated insight:', error);
+    }
+  }
+
+  /**
    * Process transcript and insight queues
    */
   private async processQueues(): Promise<void> {
@@ -1402,7 +1511,7 @@ export class MeetingManager extends EventEmitter {
   /**
    * Process individual insight item
    */
-  private async processInsightItem(item: { meetingId: string; transcript: TranscriptEntry[] }): Promise<void> {
+  private async processInsightItem(_item: { meetingId: string; transcript: TranscriptEntry[] }): Promise<void> {
     // Generate insights would be called here
     // This is a placeholder for the actual insight generation logic
   }
@@ -1633,6 +1742,152 @@ export class MeetingManager extends EventEmitter {
   }
 
   /**
+   * Sync meeting data to Salesforce CRM
+   */
+  private async syncMeetingToCRM(meetingId: string, summary: MeetingSummary): Promise<void> {
+    if (!this.salesforce) return;
+
+    const meetingState = this.activeMeetings.get(meetingId);
+    if (!meetingState) return;
+
+    try {
+      console.log(`🔄 Syncing meeting ${meetingId} to Salesforce CRM...`);
+
+      // Extract participant information
+      const participants = meetingState.participants.map(p => ({
+        email: p.email || `${p.name.toLowerCase().replace(/\s+/g, '.')}@company.com`,
+        name: p.name,
+        role: p.role === 'host' ? 'Host' : 'Attendee'
+      }));
+
+      // Create CRM payload
+      const crmPayload: MeetingToCRMPayload = {
+        meetingId,
+        participants,
+        startTime: meetingState.startTime || new Date(),
+        endTime: meetingState.endTime || new Date(),
+        duration: this.calculateMeetingDuration(meetingState),
+        summary: summary.title || 'Meeting Summary',
+        keyPoints: summary.keyPoints,
+        actionItems: summary.actionItems.map(item => ({
+          task: item.title,
+          assignee: item.assignee,
+          dueDate: item.dueDate
+        })),
+        sentiment: {
+          overall: summary.conversationScore?.overall || 50,
+          breakdown: {
+            engagement: summary.conversationScore?.metrics.engagement || 50,
+            clarity: summary.conversationScore?.metrics.clarity || 50,
+            interest: summary.conversationScore?.metrics.sentiment || 0
+          }
+        },
+        nextSteps: summary.nextSteps.map(step => step.step).join('; '),
+        dealProbability: this.calculateDealProbability(summary),
+        competitorsmentioned: this.extractCompetitors(summary),
+        productsDiscussed: this.extractProducts(summary)
+      };
+
+      // Sync to Salesforce
+      const syncResult = await this.salesforce.syncMeetingToCRM(crmPayload);
+
+      if (syncResult.success) {
+        console.log(`✅ Successfully synced meeting ${meetingId} to CRM`);
+        this.emit('crm:sync.success', { meetingId, syncResult });
+      } else {
+        console.error(`❌ Failed to sync meeting ${meetingId} to CRM:`, syncResult.errors);
+        this.emit('crm:sync.failed', { meetingId, errors: syncResult.errors });
+      }
+
+    } catch (error) {
+      console.error(`Failed to sync meeting ${meetingId} to CRM:`, error);
+      this.emit('crm:sync.error', { meetingId, error });
+    }
+  }
+
+  /**
+   * Calculate deal probability based on meeting content
+   */
+  private calculateDealProbability(summary: MeetingSummary): number {
+    let probability = 50; // Base probability
+
+    // Increase probability based on positive buying signals
+    const positiveSignals = summary.buyingSignals.filter(signal => 
+      signal.type === 'positive'
+    );
+    probability += positiveSignals.length * 10;
+
+    // Decrease probability based on concerns or objections
+    const concerns = summary.buyingSignals.filter(signal => 
+      signal.type === 'negative'
+    );
+    probability -= concerns.length * 5;
+
+    // Adjust based on overall conversation score
+    const scoreMultiplier = (summary.conversationScore?.overall || 50) / 100;
+    probability = probability * scoreMultiplier;
+
+    // Check for closing signals
+    const hasClosingSignals = summary.keyPoints.some(point => 
+      /\b(next steps?|follow up|proposal|contract|pricing|timeline|budget)\b/i.test(point)
+    );
+    if (hasClosingSignals) probability += 15;
+
+    // Ensure probability is within valid range
+    return Math.max(0, Math.min(100, Math.round(probability)));
+  }
+
+  /**
+   * Extract competitor mentions from meeting summary
+   */
+  private extractCompetitors(summary: MeetingSummary): string[] {
+    const competitors: string[] = [];
+    const competitorKeywords = [
+      'competitor', 'competing', 'alternative', 'versus', 'vs',
+      'salesforce', 'hubspot', 'pipedrive', 'zoho', 'monday.com'
+    ];
+
+    const allText = [
+      summary.title || '',
+      ...summary.keyPoints,
+      ...summary.actionItems.map(item => item.title)
+    ].join(' ').toLowerCase();
+
+    competitorKeywords.forEach(keyword => {
+      if (allText.includes(keyword)) {
+        competitors.push(keyword);
+      }
+    });
+
+    return [...new Set(competitors)]; // Remove duplicates
+  }
+
+  /**
+   * Extract product mentions from meeting summary
+   */
+  private extractProducts(summary: MeetingSummary): string[] {
+    const products: string[] = [];
+    const productKeywords = [
+      'saleshud', 'crm', 'sales intelligence', 'meeting analysis',
+      'transcription', 'ai insights', 'sales coaching'
+    ];
+
+    const allText = [
+      summary.title || '',
+      ...summary.keyPoints,
+      ...summary.actionItems.map(item => item.title)
+    ].join(' ').toLowerCase();
+
+    productKeywords.forEach(keyword => {
+      if (allText.includes(keyword)) {
+        products.push(keyword);
+      }
+    });
+
+    return [...new Set(products)]; // Remove duplicates
+  }
+
+  /**
    * Cleanup meeting resources
    */
   private cleanupMeetingResources(meetingId: string): void {
@@ -1691,6 +1946,7 @@ interface MeetingState {
   participants: any[];
   context?: any;
   errors?: string[];
+  isProcessing?: boolean;
   metrics: {
     transcriptCount: number;
     insightCount: number;

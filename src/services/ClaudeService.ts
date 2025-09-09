@@ -262,7 +262,7 @@ export class ClaudeService extends EventEmitter {
 
   // Coaching state
   private activeCoaching: Map<string, CoachingSuggestion[]> = new Map();
-  private coachingHistory: Map<string, CoachingSuggestion[]> = new Map();
+  private _coachingHistory: Map<string, CoachingSuggestion[]> = new Map();
 
   // Sales intelligence patterns
   private salesPatterns = {
@@ -794,7 +794,7 @@ export class ClaudeService extends EventEmitter {
   /**
    * Queue management for rate limiting
    */
-  private async queueRequest(prompt: string, cacheKey: string, priority: number): Promise<ClaudeResponse> {
+  private async queueRequest(prompt: string, _cacheKey: string, priority: number): Promise<ClaudeResponse> {
     return new Promise((resolve, reject) => {
       const queueItem: QueueItem = {
         id: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -895,7 +895,7 @@ export class ClaudeService extends EventEmitter {
   /**
    * Clear expired cache entries
    */
-  private cleanupCache(): void {
+  private _cleanupCache(): void {
     const now = Date.now();
     
     for (const [key, cached] of this.responseCache.entries()) {
@@ -1114,7 +1114,7 @@ Score each dimension 0-100 and provide specific feedback:
   /**
    * Parse analysis response from Claude
    */
-  private async parseAnalysisResponse(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<AnalysisResult> {
+  private async parseAnalysisResponse(response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<AnalysisResult> {
     try {
       const content = response.content[0].text;
       const parsed = JSON.parse(content);
@@ -1142,7 +1142,7 @@ Score each dimension 0-100 and provide specific feedback:
   /**
    * Parse email content from response
    */
-  private async parseEmailResponse(response: ClaudeResponse, context: MeetingContext): Promise<EmailContent> {
+  private async parseEmailResponse(response: ClaudeResponse, _context: MeetingContext): Promise<EmailContent> {
     try {
       const content = response.content[0].text;
       const parsed = JSON.parse(content);
@@ -1165,7 +1165,7 @@ Score each dimension 0-100 and provide specific feedback:
   /**
    * Parse buying signals from response
    */
-  private async parseBuyingSignalsResponse(response: ClaudeResponse, conversation: string): Promise<BuyingSignal[]> {
+  private async parseBuyingSignalsResponse(response: ClaudeResponse, _conversation: string): Promise<BuyingSignal[]> {
     try {
       const content = response.content[0].text;
       const parsed = JSON.parse(content);
@@ -1379,49 +1379,49 @@ Focus on helping sales professionals close more deals through data-driven insigh
   }
 
   // Stub methods for remaining parsing functions
-  private async parseConversationScore(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<ConversationScore> {
+  private async parseConversationScore(_response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<ConversationScore> {
     // Implementation would parse the scoring response
     return { overall: 75, metrics: { engagement: 80, sentiment: 10, clarity: 85, questionHandling: 70, objectionHandling: 75, closingEffectiveness: 65 }, strengths: [], improvements: [], timestamp: new Date() };
   }
 
-  private enhanceScoreWithQuality(score: ConversationScore, quality: ConversationQuality): ConversationScore {
+  private enhanceScoreWithQuality(score: ConversationScore, _quality: ConversationQuality): ConversationScore {
     // Implementation would combine AI score with quality metrics
     return score;
   }
 
-  private async parseResponseSuggestions(response: ClaudeResponse, objection: string): Promise<ResponseSuggestion[]> {
+  private async parseResponseSuggestions(_response: ClaudeResponse, _objection: string): Promise<ResponseSuggestion[]> {
     // Implementation would parse response suggestions
     return [];
   }
 
-  private async parseMeetingSummary(response: ClaudeResponse, meetingData: MeetingContext): Promise<MeetingSummary> {
+  private async parseMeetingSummary(_response: ClaudeResponse, _meetingData: MeetingContext): Promise<MeetingSummary> {
     // Implementation would parse meeting summary
     return {} as MeetingSummary;
   }
 
-  private async parseActionItems(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<ActionItem[]> {
+  private async parseActionItems(_response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<ActionItem[]> {
     // Implementation would parse action items
     return [];
   }
 
-  private buildDealHealthPrompt(context: MeetingContext): string { return ''; }
-  private buildCoachingPrompt(transcript: TranscriptEntry[], context: MeetingContext): string { return ''; }
-  private buildPainPointPrompt(transcript: TranscriptEntry[]): string { return ''; }
-  private buildCompetitivePrompt(transcript: TranscriptEntry[]): string { return ''; }
-  private buildResponsePrompt(objection: string, context?: any): string { return ''; }
-  private buildActionItemsPrompt(transcript: TranscriptEntry[], context?: MeetingContext): string { return ''; }
-  private buildSummaryPrompt(meetingData: MeetingContext): string { return ''; }
+  private buildDealHealthPrompt(_context: MeetingContext): string { return ''; }
+  private buildCoachingPrompt(_transcript: TranscriptEntry[], _context: MeetingContext): string { return ''; }
+  private buildPainPointPrompt(_transcript: TranscriptEntry[]): string { return ''; }
+  private buildCompetitivePrompt(_transcript: TranscriptEntry[]): string { return ''; }
+  private buildResponsePrompt(_objection: string, _context?: any): string { return ''; }
+  private buildActionItemsPrompt(_transcript: TranscriptEntry[], _context?: MeetingContext): string { return ''; }
+  private buildSummaryPrompt(_meetingData: MeetingContext): string { return ''; }
 
-  private async parseDealHealth(response: ClaudeResponse, context: MeetingContext): Promise<DealHealthScore> {
+  private async parseDealHealth(_response: ClaudeResponse, _context: MeetingContext): Promise<DealHealthScore> {
     return {} as DealHealthScore;
   }
-  private async parseCoachingSuggestions(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<CoachingSuggestion[]> {
+  private async parseCoachingSuggestions(_response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<CoachingSuggestion[]> {
     return [];
   }
-  private async parsePainPoints(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<PainPoint[]> {
+  private async parsePainPoints(_response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<PainPoint[]> {
     return [];
   }
-  private async parseCompetitiveAnalysis(response: ClaudeResponse, transcript: TranscriptEntry[]): Promise<CompetitiveAnalysis[]> {
+  private async parseCompetitiveAnalysis(_response: ClaudeResponse, _transcript: TranscriptEntry[]): Promise<CompetitiveAnalysis[]> {
     return [];
   }
 }

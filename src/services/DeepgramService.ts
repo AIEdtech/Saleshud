@@ -582,7 +582,7 @@ export class DeepgramService extends EventEmitter {
       this.processor.onaudioprocess = (event) => {
         const inputBuffer = event.inputBuffer.getChannelData(0);
         const audioData = this.convertFloat32ToInt16(inputBuffer);
-        this.processAudio(audioData.buffer);
+        this.processAudio(audioData.buffer as ArrayBuffer);
       };
 
       // Connect audio graph

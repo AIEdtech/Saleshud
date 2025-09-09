@@ -241,11 +241,11 @@ class SupabaseError extends Error {
 // ============================================================================
 
 export class SupabaseService extends EventEmitter {
-  private client: SupabaseClient | null = null;
+  private client: SupabaseClient<any, 'public', any> | null = null;
   private config: SupabaseConfig;
   private isConnected: boolean = false;
-  private reconnectAttempts: number = 0;
-  private maxReconnectAttempts: number = 5;
+  private _reconnectAttempts: number = 0;
+  private _maxReconnectAttempts: number = 5;
   private subscriptions: Map<string, RealtimeChannel> = new Map();
   private currentUser: User | null = null;
   private currentSession: Session | null = null;
