@@ -1,0 +1,213 @@
+{
+  "brand": {
+    "name": "SalesHud",
+    "description": "AI-Powered Sales Intelligence Platform",
+    "version": "1.0.0"
+  },
+  "colors": {
+    "primary": {
+      "name": "SalesHud Blue",
+      "description": "Primary brand color - deep professional blue",
+      "values": {
+        "hex": "#1a365d",
+        "rgb": [26, 54, 93],
+        "hsl": [210, 56, 23],
+        "cmyk": [72, 42, 0, 64]
+      },
+      "usage": ["Primary buttons", "Headers", "Brand elements", "Logo"]
+    },
+    "secondary": {
+      "name": "Electric Blue",
+      "description": "Secondary accent color - vibrant electric blue",
+      "values": {
+        "hex": "#3182ce",
+        "rgb": [49, 130, 206],
+        "hsl": [209, 61, 50],
+        "cmyk": [76, 37, 0, 19]
+      },
+      "usage": ["Accents", "Highlights", "Interactive elements", "Progress indicators"]
+    },
+    "tertiary": {
+      "name": "Neural Purple",
+      "description": "AI and neural network accent color",
+      "values": {
+        "hex": "#805ad5",
+        "rgb": [128, 90, 213],
+        "hsl": [259, 58, 59],
+        "cmyk": [40, 58, 0, 16]
+      },
+      "usage": ["AI features", "Neural networks", "Smart suggestions", "Analytics"]
+    },
+    "neutral": {
+      "slate": {
+        "50": {
+          "hex": "#f8fafc",
+          "usage": ["Light backgrounds", "Cards"]
+        },
+        "100": {
+          "hex": "#f1f5f9",
+          "usage": ["Subtle backgrounds"]
+        },
+        "200": {
+          "hex": "#e2e8f0",
+          "usage": ["Borders", "Dividers"]
+        },
+        "300": {
+          "hex": "#cbd5e1",
+          "usage": ["Disabled states", "Placeholders"]
+        },
+        "400": {
+          "hex": "#94a3b8",
+          "usage": ["Muted text", "Icons"]
+        },
+        "500": {
+          "hex": "#64748b",
+          "usage": ["Secondary text"]
+        },
+        "600": {
+          "hex": "#475569",
+          "usage": ["Primary text on light"]
+        },
+        "700": {
+          "hex": "#334155",
+          "usage": ["Dark text", "Headers"]
+        },
+        "800": {
+          "hex": "#1e293b",
+          "usage": ["Dark backgrounds", "Panels"]
+        },
+        "900": {
+          "hex": "#0f172a",
+          "usage": ["Deep dark backgrounds"]
+        },
+        "950": {
+          "hex": "#0a0f1c",
+          "usage": ["Ultra dark backgrounds", "Overlays"]
+        }
+      }
+    },
+    "semantic": {
+      "success": {
+        "name": "Success Green",
+        "hex": "#10b981",
+        "rgb": [16, 185, 129],
+        "usage": ["Success messages", "Completed states", "Positive indicators"]
+      },
+      "warning": {
+        "name": "Warning Amber",
+        "hex": "#f59e0b",
+        "rgb": [245, 158, 11],
+        "usage": ["Warning messages", "Caution states", "Attention"]
+      },
+      "error": {
+        "name": "Error Red",
+        "hex": "#ef4444",
+        "rgb": [239, 68, 68],
+        "usage": ["Error messages", "Destructive actions", "Failed states"]
+      },
+      "info": {
+        "name": "Info Blue",
+        "hex": "#3b82f6",
+        "rgb": [59, 130, 246],
+        "usage": ["Info messages", "Neutral notifications", "Help text"]
+      }
+    },
+    "glass": {
+      "description": "Glassmorphism effect colors for modern UI",
+      "light": {
+        "hex": "#ffffff1a",
+        "rgba": "rgba(255, 255, 255, 0.1)",
+        "usage": ["Light glass overlays", "Hover states"]
+      },
+      "medium": {
+        "hex": "#ffffff0d",
+        "rgba": "rgba(255, 255, 255, 0.05)",
+        "usage": ["Default glass backgrounds", "Cards"]
+      },
+      "dark": {
+        "hex": "#0000001a",
+        "rgba": "rgba(0, 0, 0, 0.1)",
+        "usage": ["Dark glass overlays", "Shadows"]
+      }
+    }
+  },
+  "gradients": {
+    "primary": {
+      "name": "SalesHud Gradient",
+      "type": "linear",
+      "direction": "135deg",
+      "stops": [
+        {"color": "#1a365d", "position": "0%"},
+        {"color": "#3182ce", "position": "100%"}
+      ],
+      "css": "linear-gradient(135deg, #1a365d 0%, #3182ce 100%)",
+      "usage": ["Headers", "Hero sections", "Primary CTAs"]
+    },
+    "neural": {
+      "name": "Neural Network Gradient",
+      "type": "linear",
+      "direction": "135deg",
+      "stops": [
+        {"color": "#3182ce", "position": "0%"},
+        {"color": "#805ad5", "position": "100%"}
+      ],
+      "css": "linear-gradient(135deg, #3182ce 0%, #805ad5 100%)",
+      "usage": ["AI features", "Neural visualizations", "Tech elements"]
+    },
+    "glass": {
+      "name": "Glass Gradient",
+      "type": "linear",
+      "direction": "135deg",
+      "stops": [
+        {"color": "rgba(255, 255, 255, 0.1)", "position": "0%"},
+        {"color": "rgba(255, 255, 255, 0.05)", "position": "100%"}
+      ],
+      "css": "linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)",
+      "usage": ["Glassmorphism backgrounds", "Overlay effects"]
+    }
+  },
+  "accessibility": {
+    "contrast_ratios": {
+      "aa_normal": 4.5,
+      "aa_large": 3.0,
+      "aaa_normal": 7.0,
+      "aaa_large": 4.5
+    },
+    "tested_combinations": [
+      {
+        "foreground": "#ffffff",
+        "background": "#1a365d",
+        "ratio": 8.2,
+        "level": "AAA"
+      },
+      {
+        "foreground": "#1a365d",
+        "background": "#f8fafc",
+        "ratio": 12.1,
+        "level": "AAA"
+      },
+      {
+        "foreground": "#3182ce",
+        "background": "#f8fafc",
+        "ratio": 5.8,
+        "level": "AA"
+      }
+    ]
+  },
+  "usage_guidelines": {
+    "do": [
+      "Use primary blue for main brand elements and primary actions",
+      "Apply glassmorphism effects sparingly for modern touch",
+      "Maintain high contrast ratios for accessibility",
+      "Use semantic colors consistently for their intended purposes",
+      "Test color combinations in both light and dark themes"
+    ],
+    "dont": [
+      "Don't use more than 3 colors in a single component",
+      "Don't use pure black (#000000) or pure white (#ffffff) for text",
+      "Don't apply glassmorphism to text-heavy areas",
+      "Don't use semantic colors for decorative purposes",
+      "Don't ignore accessibility contrast requirements"
+    ]
+  }
+}

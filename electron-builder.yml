@@ -1,0 +1,173 @@
+appId: com.saleshud.app
+productName: SalesHud
+copyright: Copyright © 2025 SalesHud
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - node_modules/**/*
+  - package.json
+  - "!**/*.{ts,tsx,map}"
+  - "!**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}"
+  - "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}"
+  - "!**/node_modules/*.d.ts"
+  - "!**/node_modules/.bin"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  - "!.editorconfig"
+  - "!**/._*"
+  - "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}"
+  - "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}"
+  - "!**/{appveyor.yml,.travis.yml,circle.yml}"
+  - "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+
+asarUnpack:
+  - node_modules/sharp/**/*
+  - node_modules/@supabase/**/*
+
+mac:
+  category: public.app-category.business
+  icon: assets/icons/icon.icns
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: build/entitlements.mac.plist
+  entitlementsInherit: build/entitlements.mac.plist
+  darkModeSupport: true
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+    - target: zip
+      arch:
+        - x64
+        - arm64
+  type: distribution
+  extendInfo:
+    LSUIElement: false
+    NSMicrophoneUsageDescription: SalesHud needs access to your microphone for real-time transcription during calls.
+    NSCameraUsageDescription: SalesHud needs access to your camera for video calls and screen sharing.
+    NSScreenCaptureDescription: SalesHud needs screen recording permission to display the overlay and capture meeting content.
+    NSSystemAdministrationUsageDescription: SalesHud needs system permissions to integrate with your calendar and communication tools.
+    CFBundleURLTypes:
+      - CFBundleURLSchemes:
+          - saleshud
+        CFBundleURLName: com.saleshud.app
+    LSApplicationCategoryType: public.app-category.business
+    NSRequiresAquaSystemAppearance: false
+    NSHighResolutionCapable: true
+    NSSupportsAutomaticGraphicsSwitching: true
+
+dmg:
+  title: ${productName} ${version}
+  icon: assets/icons/icon.icns
+  iconSize: 100
+  background: assets/dmg-background.png
+  contents:
+    - x: 410
+      y: 150
+      type: link
+      path: /Applications
+    - x: 130
+      y: 150
+      type: file
+  window:
+    width: 540
+    height: 380
+  artifactName: ${productName}-${version}-${arch}.${ext}
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - ia32
+  icon: assets/icons/icon.ico
+  requestedExecutionLevel: requireAdministrator
+  certificateFile: build/certificate.pfx
+  certificatePassword: ${WINDOWS_CERTIFICATE_PASSWORD}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  installerIcon: assets/icons/icon.ico
+  uninstallerIcon: assets/icons/icon.ico
+  installerHeaderIcon: assets/icons/icon.ico
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SalesHud
+  artifactName: ${productName}-Setup-${version}.${ext}
+  menuCategory: true
+  warningsAsErrors: false
+  include: build/installer.nsh
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+    - target: deb
+      arch:
+        - x64
+    - target: rpm
+      arch:
+        - x64
+  icon: assets/icons
+  category: Office
+  synopsis: AI-powered sales intelligence overlay
+  description: SalesHud provides real-time AI insights during your sales calls
+  desktop:
+    Name: SalesHud
+    Comment: AI-powered sales intelligence overlay
+    Categories: Office;Business;
+    StartupWMClass: saleshud
+
+appImage:
+  artifactName: ${productName}-${version}.${ext}
+  systemIntegration: ask
+
+deb:
+  artifactName: ${productName}_${version}_${arch}.${ext}
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libuuid1
+    - libsecret-1-0
+
+rpm:
+  artifactName: ${productName}-${version}.${arch}.${ext}
+
+protocols:
+  - name: saleshud
+    schemes:
+      - saleshud
+
+publish:
+  - provider: github
+    owner: saleshud
+    repo: saleshud-app
+    releaseType: prerelease
+    private: false
+  - provider: generic
+    url: https://releases.saleshud.ai
+    channel: latest
+
+afterSign: build/notarize.js
+
+releaseInfo:
+  releaseNotes: |
+    SalesHud Beta Release
+    - Real-time transcription during calls
+    - AI-powered insights generation
+    - Email template suggestions
+    - Meeting summary generation
+    - CRM integration support

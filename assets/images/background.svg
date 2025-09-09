@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#334155;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#475569;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Neural network pattern -->
+    <pattern id="neuralPattern" width="100" height="100" patternUnits="userSpaceOnUse">
+      <g opacity="0.03">
+        <!-- Grid lines -->
+        <path d="M 0 0 L 100 0 M 0 0 L 0 100" stroke="#3182ce" stroke-width="0.5"/>
+        
+        <!-- Nodes -->
+        <circle cx="25" cy="25" r="2" fill="#3182ce"/>
+        <circle cx="75" cy="75" r="2" fill="#805ad5"/>
+        
+        <!-- Connections -->
+        <path d="M 25 25 L 75 75" stroke="#3182ce" stroke-width="0.5" opacity="0.5"/>
+      </g>
+    </pattern>
+    
+    <!-- Glow effects -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="1920" height="1080" fill="url(#bgGradient)"/>
+  
+  <!-- Neural network overlay -->
+  <rect width="1920" height="1080" fill="url(#neuralPattern)"/>
+  
+  <!-- Floating elements for depth -->
+  <g opacity="0.1">
+    <!-- Large circles -->
+    <circle cx="200" cy="200" r="100" fill="url(#neuralGradient)" filter="url(#glow)"/>
+    <circle cx="1720" cy="880" r="150" fill="url(#brandGradient)" filter="url(#glow)"/>
+    <circle cx="1600" cy="300" r="80" fill="#805ad5" filter="url(#glow)"/>
+    
+    <!-- Abstract shapes -->
+    <polygon points="100,800 200,700 300,850 150,950" fill="#3182ce" opacity="0.3"/>
+    <polygon points="1500,100 1700,50 1650,250 1400,200" fill="#805ad5" opacity="0.3"/>
+  </g>
+  
+  <!-- Subtle gradient overlay for depth -->
+  <rect width="1920" height="1080" 
+        fill="linear-gradient(135deg, transparent 0%, rgba(26,54,93,0.1) 50%, transparent 100%)"
+        opacity="0.5"/>
+</svg>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background with rounded corners for modern app icon -->
+  <defs>
+    <linearGradient id="mainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a365d;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3182ce;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#805ad5;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="highlightGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.1" />
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Icon mask for rounded corners -->
+    <mask id="iconMask">
+      <rect width="512" height="512" rx="90" ry="90" fill="white"/>
+    </mask>
+  </defs>
+  
+  <!-- Main background -->
+  <rect width="512" height="512" rx="90" ry="90" fill="url(#mainGradient)"/>
+  
+  <!-- Content group -->
+  <g mask="url(#iconMask)">
+    <!-- Neural network background pattern -->
+    <g opacity="0.15">
+      <!-- Grid lines -->
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      <rect width="512" height="512" fill="url(#grid)" />
+    </g>
+    
+    <!-- Central monogram -->
+    <g transform="translate(256, 256)">
+      <!-- Background circle -->
+      <circle r="120" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+      
+      <!-- SH Letters -->
+      <g transform="translate(-45, 15)">
+        <!-- S -->
+        <path d="M 0 -40 
+                 C 0 -40, 30 -40, 30 -25
+                 C 30 -10, 0 -10, 0 -10
+                 C 0 -10, 30 -10, 30 5
+                 C 30 20, 0 20, 0 20"
+              stroke="#ffffff" 
+              stroke-width="8" 
+              fill="none" 
+              stroke-linecap="round" 
+              stroke-linejoin="round"
+              filter="url(#glow)"/>
+        
+        <!-- H -->
+        <g transform="translate(50, 0)">
+          <path d="M 10 -40 L 10 20 M 40 -40 L 40 20 M 10 -10 L 40 -10"
+                stroke="#ffffff" 
+                stroke-width="8" 
+                fill="none" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+                filter="url(#glow)"/>
+        </g>
+      </g>
+      
+      <!-- Neural network dots -->
+      <g opacity="0.8">
+        <!-- Inner ring -->
+        <circle cx="-60" cy="-60" r="4" fill="#ffffff"/>
+        <circle cx="60" cy="-60" r="4" fill="#ffffff"/>
+        <circle cx="-60" cy="60" r="4" fill="#ffffff"/>
+        <circle cx="60" cy="60" r="4" fill="#ffffff"/>
+        
+        <!-- Outer ring -->
+        <circle cx="-90" cy="0" r="3" fill="#ffffff" opacity="0.7"/>
+        <circle cx="90" cy="0" r="3" fill="#ffffff" opacity="0.7"/>
+        <circle cx="0" cy="-90" r="3" fill="#ffffff" opacity="0.7"/>
+        <circle cx="0" cy="90" r="3" fill="#ffffff" opacity="0.7"/>
+        
+        <!-- Connection lines -->
+        <path d="M -60 -60 L 0 0 L 60 -60" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+        <path d="M -60 60 L 0 0 L 60 60" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+        <path d="M -90 0 L 0 0 L 90 0" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+        <path d="M 0 -90 L 0 0 L 0 90" stroke="#ffffff" stroke-width="1" opacity="0.4"/>
+      </g>
+      
+      <!-- Sales chart pattern in corner -->
+      <g transform="translate(40, 40)" opacity="0.6">
+        <path d="M 0 20 L 15 5 L 30 15 L 45 0 L 60 10" 
+              stroke="#ffffff" 
+              stroke-width="3" 
+              fill="none" 
+              stroke-linecap="round"/>
+        
+        <!-- Data points -->
+        <circle cx="15" cy="5" r="2" fill="#ffffff"/>
+        <circle cx="30" cy="15" r="2" fill="#ffffff"/>
+        <circle cx="45" cy="0" r="2" fill="#ffffff"/>
+        <circle cx="60" cy="10" r="2" fill="#ffffff"/>
+      </g>
+    </g>
+    
+    <!-- Top highlight for depth -->
+    <ellipse cx="256" cy="120" rx="150" ry="60" fill="url(#highlightGradient)" opacity="0.6"/>
+    
+    <!-- Subtle inner shadow -->
+    <rect width="512" height="512" rx="90" ry="90" 
+          fill="none" 
+          stroke="rgba(0,0,0,0.1)" 
+          stroke-width="2" 
+          stroke-location="inside"/>
+  </g>
+</svg>

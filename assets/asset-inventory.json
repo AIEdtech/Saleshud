@@ -1,0 +1,60 @@
+{
+  "generated": "2025-09-09T01:23:39.928Z",
+  "version": "1.0.0",
+  "assets": {
+    "icons": {
+      "main": {
+        "source": "assets/icons/icon-source.svg",
+        "formats": [
+          "png",
+          "icns",
+          "ico"
+        ],
+        "sizes": [
+          16,
+          24,
+          32,
+          48,
+          64,
+          128,
+          256,
+          512,
+          1024
+        ]
+      },
+      "tray": {
+        "source": "assets/icons/tray-icon-source.svg",
+        "formats": [
+          "png"
+        ],
+        "sizes": [
+          16,
+          32
+        ],
+        "templates": true
+      }
+    },
+    "branding": {
+      "logo": "assets/images/logo.svg",
+      "colors": "assets/branding/colors.json",
+      "typography": "assets/branding/fonts.json"
+    },
+    "build": {
+      "entitlements": "build/entitlements.mac.plist",
+      "installer_script": "build/installer.nsh",
+      "dmg_background": "build/dmg-background.png"
+    }
+  },
+  "specifications": {
+    "icon_sizes": {
+      "app": "512x512 primary, with variants for platform requirements",
+      "tray": "16x16 and 32x32 for retina displays",
+      "installer": "256x256 for installation dialogs"
+    },
+    "formats": {
+      "icns": "macOS app bundle icon format",
+      "ico": "Windows executable icon format",
+      "png": "Universal raster format for Linux and web"
+    }
+  }
+}

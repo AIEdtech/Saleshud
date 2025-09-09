@@ -1,0 +1,348 @@
+{
+  "typography": {
+    "brand": {
+      "name": "SalesHud Typography System",
+      "version": "1.0.0",
+      "description": "Professional typography system for AI-powered sales intelligence platform"
+    },
+    "font_families": {
+      "primary": {
+        "name": "Inter",
+        "type": "sans-serif",
+        "source": "Google Fonts",
+        "url": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap",
+        "fallback": ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        "css": "font-family: 'Inter', system-ui, -apple-system, sans-serif",
+        "weights": [300, 400, 500, 600, 700, 800, 900],
+        "usage": ["Body text", "Headers", "UI elements", "Navigation"],
+        "characteristics": ["Highly legible", "Modern", "Professional", "Optimized for screens"]
+      },
+      "monospace": {
+        "name": "JetBrains Mono",
+        "type": "monospace",
+        "source": "Google Fonts",
+        "url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap",
+        "fallback": ["Monaco", "Consolas", "Liberation Mono", "monospace"],
+        "css": "font-family: 'JetBrains Mono', Monaco, Consolas, monospace",
+        "weights": [400, 500, 600],
+        "usage": ["Code blocks", "API responses", "Technical data", "Timestamps"],
+        "characteristics": ["Coding optimized", "High contrast", "Clear distinction between characters"]
+      },
+      "display": {
+        "name": "Inter Display",
+        "type": "sans-serif",
+        "source": "Google Fonts",
+        "fallback": ["Inter", "system-ui", "-apple-system", "sans-serif"],
+        "css": "font-family: 'Inter Display', 'Inter', system-ui, sans-serif",
+        "weights": [400, 500, 600, 700, 800, 900],
+        "usage": ["Large headlines", "Hero text", "Marketing headers"],
+        "characteristics": ["Optimized for large sizes", "Distinctive", "Brand-forward"]
+      }
+    },
+    "scale": {
+      "type": "modular",
+      "ratio": 1.25,
+      "base": 16,
+      "sizes": {
+        "xs": {
+          "size": "0.75rem",
+          "px": 12,
+          "line_height": "1rem",
+          "usage": ["Captions", "Helper text", "Small labels"]
+        },
+        "sm": {
+          "size": "0.875rem",
+          "px": 14,
+          "line_height": "1.25rem",
+          "usage": ["Secondary text", "Form labels", "Metadata"]
+        },
+        "base": {
+          "size": "1rem",
+          "px": 16,
+          "line_height": "1.5rem",
+          "usage": ["Body text", "Default UI text", "Paragraphs"]
+        },
+        "lg": {
+          "size": "1.125rem",
+          "px": 18,
+          "line_height": "1.75rem",
+          "usage": ["Lead text", "Important content", "Subheaders"]
+        },
+        "xl": {
+          "size": "1.25rem",
+          "px": 20,
+          "line_height": "1.75rem",
+          "usage": ["Small headers", "Card titles", "Section headers"]
+        },
+        "2xl": {
+          "size": "1.5rem",
+          "px": 24,
+          "line_height": "2rem",
+          "usage": ["Medium headers", "Page titles", "Modal headers"]
+        },
+        "3xl": {
+          "size": "1.875rem",
+          "px": 30,
+          "line_height": "2.25rem",
+          "usage": ["Large headers", "Feature titles", "Section dividers"]
+        },
+        "4xl": {
+          "size": "2.25rem",
+          "px": 36,
+          "line_height": "2.5rem",
+          "usage": ["Extra large headers", "Hero titles", "Landing pages"]
+        },
+        "5xl": {
+          "size": "3rem",
+          "px": 48,
+          "line_height": "3.5rem",
+          "usage": ["Display headers", "Marketing headers", "Brand headers"]
+        },
+        "6xl": {
+          "size": "3.75rem",
+          "px": 60,
+          "line_height": "4rem",
+          "usage": ["Massive displays", "Hero banners", "Splash screens"]
+        }
+      }
+    },
+    "weights": {
+      "light": {
+        "value": 300,
+        "name": "Light",
+        "usage": ["Large text", "Elegant displays", "Secondary content"]
+      },
+      "normal": {
+        "value": 400,
+        "name": "Regular",
+        "usage": ["Body text", "Default content", "Readable text"]
+      },
+      "medium": {
+        "value": 500,
+        "name": "Medium",
+        "usage": ["Emphasis", "UI elements", "Semi-bold text"]
+      },
+      "semibold": {
+        "value": 600,
+        "name": "Semibold",
+        "usage": ["Headers", "Important text", "Button text"]
+      },
+      "bold": {
+        "value": 700,
+        "name": "Bold",
+        "usage": ["Strong emphasis", "Headers", "Call-to-action"]
+      },
+      "extrabold": {
+        "value": 800,
+        "name": "Extra Bold",
+        "usage": ["Display text", "Brand headers", "Marketing"]
+      },
+      "black": {
+        "value": 900,
+        "name": "Black",
+        "usage": ["Maximum emphasis", "Display headers", "Brand elements"]
+      }
+    },
+    "line_heights": {
+      "tight": {
+        "value": 1.25,
+        "usage": ["Headers", "Short text", "Tight layouts"]
+      },
+      "snug": {
+        "value": 1.375,
+        "usage": ["Subheaders", "Card titles", "UI labels"]
+      },
+      "normal": {
+        "value": 1.5,
+        "usage": ["Body text", "Default content", "Readable paragraphs"]
+      },
+      "relaxed": {
+        "value": 1.625,
+        "usage": ["Long-form content", "Articles", "Documentation"]
+      },
+      "loose": {
+        "value": 2,
+        "usage": ["Large text", "Spacing emphasis", "Display text"]
+      }
+    },
+    "letter_spacing": {
+      "tighter": {
+        "value": "-0.05em",
+        "usage": ["Large headers", "Display text", "Compact layouts"]
+      },
+      "tight": {
+        "value": "-0.025em",
+        "usage": ["Medium headers", "Subheaders", "UI elements"]
+      },
+      "normal": {
+        "value": "0em",
+        "usage": ["Body text", "Default content", "Readable text"]
+      },
+      "wide": {
+        "value": "0.025em",
+        "usage": ["Small text", "Captions", "Spaced layouts"]
+      },
+      "wider": {
+        "value": "0.05em",
+        "usage": ["Uppercase text", "Buttons", "Navigation"]
+      },
+      "widest": {
+        "value": "0.1em",
+        "usage": ["All caps", "Labels", "Maximum spacing"]
+      }
+    },
+    "semantic_styles": {
+      "heading": {
+        "h1": {
+          "font_size": "3rem",
+          "line_height": "3.5rem",
+          "font_weight": 700,
+          "letter_spacing": "-0.025em",
+          "usage": "Page titles, main headers"
+        },
+        "h2": {
+          "font_size": "2.25rem",
+          "line_height": "2.5rem",
+          "font_weight": 600,
+          "letter_spacing": "-0.025em",
+          "usage": "Section headers, major divisions"
+        },
+        "h3": {
+          "font_size": "1.875rem",
+          "line_height": "2.25rem",
+          "font_weight": 600,
+          "letter_spacing": "0em",
+          "usage": "Subsection headers, component titles"
+        },
+        "h4": {
+          "font_size": "1.5rem",
+          "line_height": "2rem",
+          "font_weight": 500,
+          "letter_spacing": "0em",
+          "usage": "Card headers, minor sections"
+        },
+        "h5": {
+          "font_size": "1.25rem",
+          "line_height": "1.75rem",
+          "font_weight": 500,
+          "letter_spacing": "0em",
+          "usage": "Small headers, list titles"
+        },
+        "h6": {
+          "font_size": "1.125rem",
+          "line_height": "1.75rem",
+          "font_weight": 500,
+          "letter_spacing": "0em",
+          "usage": "Smallest headers, group labels"
+        }
+      },
+      "body": {
+        "large": {
+          "font_size": "1.125rem",
+          "line_height": "1.75rem",
+          "font_weight": 400,
+          "usage": "Lead paragraphs, important content"
+        },
+        "normal": {
+          "font_size": "1rem",
+          "line_height": "1.5rem",
+          "font_weight": 400,
+          "usage": "Standard body text, default content"
+        },
+        "small": {
+          "font_size": "0.875rem",
+          "line_height": "1.25rem",
+          "font_weight": 400,
+          "usage": "Secondary content, captions"
+        }
+      },
+      "ui": {
+        "button_large": {
+          "font_size": "1rem",
+          "line_height": "1.5rem",
+          "font_weight": 500,
+          "letter_spacing": "0.025em",
+          "usage": "Primary buttons, CTAs"
+        },
+        "button_normal": {
+          "font_size": "0.875rem",
+          "line_height": "1.25rem",
+          "font_weight": 500,
+          "letter_spacing": "0.025em",
+          "usage": "Standard buttons, actions"
+        },
+        "button_small": {
+          "font_size": "0.75rem",
+          "line_height": "1rem",
+          "font_weight": 500,
+          "letter_spacing": "0.025em",
+          "usage": "Small buttons, compact UI"
+        },
+        "label": {
+          "font_size": "0.875rem",
+          "line_height": "1.25rem",
+          "font_weight": 500,
+          "letter_spacing": "0em",
+          "usage": "Form labels, field names"
+        },
+        "input": {
+          "font_size": "1rem",
+          "line_height": "1.5rem",
+          "font_weight": 400,
+          "letter_spacing": "0em",
+          "usage": "Input fields, text areas"
+        }
+      },
+      "code": {
+        "inline": {
+          "font_family": "JetBrains Mono",
+          "font_size": "0.875rem",
+          "line_height": "1.25rem",
+          "font_weight": 400,
+          "usage": "Inline code, variables"
+        },
+        "block": {
+          "font_family": "JetBrains Mono",
+          "font_size": "0.875rem",
+          "line_height": "1.5rem",
+          "font_weight": 400,
+          "usage": "Code blocks, API responses"
+        }
+      }
+    },
+    "responsive": {
+      "mobile": {
+        "scale_factor": 0.875,
+        "description": "Slightly smaller text for mobile screens"
+      },
+      "tablet": {
+        "scale_factor": 0.9375,
+        "description": "Moderately sized text for tablet screens"
+      },
+      "desktop": {
+        "scale_factor": 1,
+        "description": "Base scale for desktop screens"
+      },
+      "large_desktop": {
+        "scale_factor": 1.125,
+        "description": "Larger text for high-resolution displays"
+      }
+    },
+    "usage_guidelines": {
+      "do": [
+        "Use Inter for all body text and UI elements",
+        "Maintain consistent line heights within content blocks",
+        "Use semantic heading hierarchy (h1 → h6)",
+        "Apply appropriate font weights for emphasis",
+        "Test typography at different screen sizes"
+      ],
+      "dont": [
+        "Mix more than 2 font families in a single interface",
+        "Use font weights below 300 for small text",
+        "Skip heading levels in hierarchy",
+        "Use all caps for long content",
+        "Ignore responsive typography scaling"
+      ]
+    }
+  }
+}
